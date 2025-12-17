@@ -32,6 +32,26 @@
         <!-- Contenitore di Gioco -->
         <div class="game-container hidden" id="game-container">
             
+            <main id="scene-area" class="scene-card">
+                <div class="bias-tag" id="scene-bias">CARICAMENTO...</div>
+                <h2 id="scene-title">Inizializzazione gioco</h2>
+                
+                <!-- Spazio per Illustrazione -->
+                <div class="scene-illustration" id="scene-illustration">
+                    <!-- Sostituisci 'percorso/immagine.jpg' con il file di default o lascialo vuoto se gestito via JS -->
+                    <img id="scene-img" src="img/bdi_intro.png" alt="Illustrazione Scena" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+                </div>
+
+                <p id="scene-text" class="story-text">...</p>
+                
+                <div id="feedback-area" class="feedback-box hidden">
+                    <div id="feedback-text"></div>
+                    <button id="btn-next" class="btn-primary">Avanti >></button>
+                </div>
+
+                <div id="choices-area" class="choices-grid"></div>
+            </main>
+
             <header class="hud">
                 <div class="stat-box">
                     <span class="stat-icon">💰</span>
@@ -55,26 +75,6 @@
                     </div>
                 </div>
             </header>
-
-            <main id="scene-area" class="scene-card">
-                <div class="bias-tag" id="scene-bias">CARICAMENTO...</div>
-                <h2 id="scene-title">Inizializzazione gioco</h2>
-                
-                <!-- Spazio per Illustrazione -->
-                <div class="scene-illustration" id="scene-illustration">
-                    <!-- Sostituisci 'percorso/immagine.jpg' con il file di default o lascialo vuoto se gestito via JS -->
-                    <img id="scene-img" src="img/bdi_intro.jpg" alt="Illustrazione Scena" style="width: 100%; height: auto; display: block; border-radius: 8px;">
-                </div>
-
-                <p id="scene-text" class="story-text">...</p>
-                
-                <div id="feedback-area" class="feedback-box hidden">
-                    <p id="feedback-text"></p>
-                    <button id="btn-next" class="btn-primary">Avanti >></button>
-                </div>
-
-                <div id="choices-area" class="choices-grid"></div>
-            </main>
 
         </div>
     </div>

@@ -31,7 +31,8 @@ export const gameData = {
       id: "start_001",
       title: "Venerdì Sera: La Sorpresa",
       text: "Il telefono vibra. Notifica dalla banca: +2.000€ accreditati. È il premio produzione che non ti aspettavi! I soldi sono lì, 'freschi' e non pianificati. Ti senti invincibile.",
-      biasTag: "Mental Accounting", // Etichetta educativa
+      biasTag: "In questa scena scoprirai il Mental Accounting: un errore logico che ci porta a spendere diversamente i soldi in base a come li abbiamo ricevuti.",
+      biasName: "Mental Accounting",
       choices: [
         {
           text: "Si vive una volta sola! Prenoto la vacanza.",
@@ -49,6 +50,7 @@ export const gameData = {
           text: "Aggiungo al piano di accumulo esistente.",
           outcomeText: "Noioso? Forse. Ma hai trattato questi soldi come qualsiasi altro stipendio. La tua futura stabilità ringrazia.",
           effects: { capital: 0, lucidity: 5 }, // Guadagna lucidità (tranquillità) -> Flash VERDE
+          isCorrect: true,
           nextScene: "scene_002"
         }
       ]
@@ -59,7 +61,8 @@ export const gameData = {
       id: "scene_002",
       title: "Sabato Sera: La Cena",
       text: "Sei a cena. Marco tira fuori il telefono: 'Ragazzi, CryptoDog ha fatto +40% ieri! State perdendo il treno!'. Tutti i tuoi amici iniziano a scaricare l'app per comprare. L'atmosfera è elettrica.",
-      biasTag: "Effetto Gregge (FOMO)",
+      biasTag: "In questa slide andremo a scoprire come funziona un bias particolarmente diffuso: l'Effetto Gregge, anche conosciuto come FOMO (Fear Of Missing Out).",
+      biasName: "Effetto Gregge (FOMO)",
       choices: [
         {
           text: "Non voglio restare indietro! Compro!",
@@ -69,14 +72,16 @@ export const gameData = {
         },
         {
           text: "Dico a tutti che è una truffa.",
-          outcomeText: "Hai rovinato la cena. Marco ti guarda male e ti senti isolato socialmente, anche se forse hai ragione.",
-          effects: { capital: 0, lucidity: -15 }, // Danno sociale/stress
+          outcomeText: "Hai rovinato la cena. Ma hai salvato il portafoglio dei tuo amici.",
+          effects: { capital: 0, lucidity: 15 }, // Danno sociale/stress
+          isCorrect: true,
           nextScene: "scene_003"
         },
         {
           text: "Interessante, ma ci guarderò domani.",
           outcomeText: "Hai resistito alla pressione sociale. È stato difficile non farsi trascinare dall'euforia collettiva.",
           effects: { capital: 0, lucidity: 5 }, // Rinforzo positivo autocontrollo
+          isCorrect: true,
           nextScene: "scene_003"
         }
       ]
@@ -87,7 +92,8 @@ export const gameData = {
       id: "scene_003",
       title: "Due Settimane Dopo: Il Risveglio",
       text: "Apri gli occhi e guardi il telefono. È tutto rosso. Il mercato perde il 5%, ma le 'CryptoDog' e i titoli tech speculativi sono crollati del 35%. I giornali titolano: 'BRUCIATI MILIARDI'.",
-      biasTag: "Avversione alle Perdite",
+      biasTag: "Qui analizzeremo l'Avversione alle Perdite: la tendenza psicologica a soffrire per una perdita molto più di quanto si gioisca per un guadagno equivalente.",
+      biasName: "Avversione alle Perdite",
       choices: [
         {
           text: "VENDO TUTTO! Basta dolore!",
@@ -105,6 +111,7 @@ export const gameData = {
           text: "Chiudo l'app e bevo il caffè.",
           outcomeText: "La scelta più difficile. Ignorare il rumore di fondo. Il tuo orizzonte è di 10 anni, non di 10 minuti.",
           effects: { capital: 0, lucidity: 10 },
+          isCorrect: true,
           nextScene: "end_chapter_1"
         }
       ]
@@ -115,7 +122,7 @@ export const gameData = {
         id: "end_chapter_1",
         title: "Resoconto",
         text: "Hai superato la prima tempesta. Molti investitori si sarebbero fatti prendere dal panico o dall'euforia. Tu sei ancora in piedi.",
-        biasTag: "Fine Capitolo 1",
+        biasTag: "Conclusione del percorso: ecco cosa hai imparato finora sulla gestione emotiva.",
         choices: [
             {
                 text: "Ricomincia l'avventura",

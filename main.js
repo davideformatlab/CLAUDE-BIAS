@@ -13,8 +13,8 @@ let prevLucidity = gameData.config.initialStats.lucidity;
 // --- MAPPA IMMAGINI ---
 // Qui associamo l'ID della scena al file immagine corrispondente
 const sceneImages = {
-    "start_001": "img/bdi_intro.jpg",
-    "scene_002": "img/sms_phishing.jpg",
+    "start_001": "img/bdi_intro.png",
+    "scene_002": "img/sms_phishing.png",
     "scene_003": "img/supermarket.jpg"
 };
 
@@ -47,13 +47,10 @@ const ui = {
 // --- MOTORE DI GIOCO ---
 
 /**
- * Gestisce il Feedback Visivo (Flash schermo + Scossa HUD)
- * @param {string} type - 'capital' o 'lucidity'
- * @param {boolean} isDamage - true = danno (rosso), false = guadagno (verde)
+ * Gestisce il Flash a tutto schermo
+ * @param {boolean} isDamage - true = rosso, false = verde
  */
-function triggerVisualFeedback(type, isDamage) {
-    
-    // 1. GESTIONE FLASH A TUTTO SCHERMO
+function triggerFlash(isDamage) {
     if (ui.flashOverlay) {
         // Rimuoviamo le classi attive per poterle riavviare
         ui.flashOverlay.classList.remove('flash-damage-active');
@@ -74,40 +71,53 @@ function triggerVisualFeedback(type, isDamage) {
         setTimeout(() => {
             ui.flashOverlay.classList.remove('flash-damage-active');
             ui.flashOverlay.classList.remove('flash-gain-active');
-        }, 800);
+        }, 1500);
     }
+}
 
-    // 2. GESTIONE SHAKE SULLE BARRE (Solo se è DANNO)
-    if (isDamage) {
-        let container = null;
-        if (type === 'capital') container = ui.barCapital.closest('.stat-box');
-        if (type === 'lucidity') container = ui.barLucidity.closest('.stat-box');
+/**
+ * Gestisce lo Shake delle barre
+ * @param {string} type - 'capital' o 'lucidity'
+ */
+function triggerShake(type) {
+    let container = null;
+    if (type === 'capital') container = ui.barCapital.closest('.stat-box');
+    if (type === 'lucidity') container = ui.barLucidity.closest('.stat-box');
 
-        if (container) {
-            container.classList.remove('shake-damage'); // Reset
-            void container.offsetWidth; // Reflow
-            container.classList.add('shake-damage');
-            
-            setTimeout(() => container.classList.remove('shake-damage'), 500);
-        }
+    if (container) {
+        container.classList.remove('shake-damage'); // Reset
+        void container.offsetWidth; // Reflow
+        container.classList.add('shake-damage');
+        setTimeout(() => container.classList.remove('shake-damage'), 500);
     }
 }
 
 function updateHUD() {
     // --- RILEVAMENTO CAMBIAMENTI ---
+    let isDamage = false;
+    let isGain = false;
     
     // Controllo Capitale
     if (currentState.stats.capital < prevCapital) {
-        triggerVisualFeedback('capital', true); // DANNO (Rosso + Shake)
+        isDamage = true;
+        triggerShake('capital');
     } else if (currentState.stats.capital > prevCapital) {
-        triggerVisualFeedback('capital', false); // CURA (Verde)
+        isGain = true;
     }
     
     // Controllo Lucidità
     if (currentState.stats.lucidity < prevLucidity) {
-        triggerVisualFeedback('lucidity', true); // DANNO
+        isDamage = true;
+        triggerShake('lucidity');
     } else if (currentState.stats.lucidity > prevLucidity) {
-        triggerVisualFeedback('lucidity', false); // CURA
+        isGain = true;
+    }
+
+    // LOGICA PRIORITÀ: Il danno vince sempre sul guadagno
+    if (isDamage) {
+        triggerFlash(true); // Rosso
+    } else if (isGain) {
+        triggerFlash(false); // Verde
     }
 
     // Aggiorna i "precedenti" per il prossimo turno
@@ -146,7 +156,7 @@ function renderScene(sceneId) {
 
     // Gestione Immagine
     // Usa l'immagine dalla mappa, oppure quella nell'oggetto scena, oppure un default
-    const imgSrc = sceneImages[sceneId] || scene.image || "img/bdi_intro.jpg";
+    const imgSrc = sceneImages[sceneId] || scene.image || "img/bdi_intro.png";
     if (ui.sceneImg) ui.sceneImg.src = imgSrc;
     
     // Nascondi feedback, mostra scelte
@@ -182,7 +192,33 @@ function handleChoice(choice) {
     // 3. Mostra Feedback
     ui.choicesArea.innerHTML = ''; 
     ui.feedbackArea.classList.remove('hidden');
-    ui.feedbackText.innerText = choice.outcomeText;
+    
+    // Reset stile vittoria
+    ui.feedbackArea.classList.remove('victory-mode');
+
+    if (choice.isCorrect) {
+        ui.feedbackArea.classList.add('victory-mode');
+        const currentScene = gameData.scenes[currentState.currentSceneId];
+        const bossName = currentScene.biasName || "Bias Cognitivo";
+        
+        ui.feedbackText.innerHTML = `
+            <div class="victory-header">
+                <span class="victory-icon">🏆</span>
+                <div class="victory-text">
+                    <h3>BOSS SCONFITTO!</h3>
+                    <small>Hai neutralizzato: ${bossName}</small>
+                </div>
+            </div>
+            <p>${choice.outcomeText}</p>
+        `;
+    } else {
+        ui.feedbackText.innerHTML = `
+            <p>${choice.outcomeText}</p>
+            <div class="boss-power-up">
+                <span>⚡</span> Il boss acquisisce energia dai tuoi bias
+            </div>
+        `;
+    }
 
     ui.btnNext.onclick = () => {
         if (choice.nextScene) {
