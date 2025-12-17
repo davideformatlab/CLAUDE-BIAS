@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Survival</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Sfondo Atmosferico -->
+    <div class="ambient-background"></div>
+
+    <!-- Overlay per i flash -->
+    <div id="flash-overlay" class="flash-overlay"></div>
+
+    <!-- Contenitore Principale -->
+    <div class="game-wrapper">
+        
+        <!-- Box di Onboarding -->
+        <div id="onboarding-box" class="onboarding-card">
+            <div class="onboarding-icon">🎯</div>
+            <h2>Benvenuto in Financial Survival</h2>
+            <p>Sei un investitore alle prime armi. Il mercato è un campo minato di bias cognitivi e trappole emotive.</p>
+            <p><strong>La tua missione:</strong> sopravvivere mantenendo capitale e lucidità mentale.</p>
+            <button id="btn-start-game" class="btn-start">Inizia l'Avventura</button>
+        </div>
+
+        <!-- Contenitore di Gioco -->
+        <div class="game-container hidden" id="game-container">
+            
+            <header class="hud">
+                <div class="stat-box">
+                    <span class="stat-icon">💰</span>
+                    <div class="stat-info">
+                        <label>Capitale</label>
+                        <span id="stat-capital-val">10.000€</span>
+                        <div class="progress-bar">
+                            <div id="bar-capital" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat-icon">🧠</span>
+                    <div class="stat-info">
+                        <label>Lucidità</label>
+                        <span id="stat-lucidity-val">100%</span>
+                        <div class="progress-bar">
+                            <div id="bar-lucidity" style="width: 100%" class="blue-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main id="scene-area" class="scene-card">
+                <div class="bias-tag" id="scene-bias">CARICAMENTO...</div>
+                <h2 id="scene-title">Inizializzazione gioco</h2>
+                
+                <!-- Spazio per Illustrazione -->
+                <div class="scene-illustration" id="scene-illustration">
+                    <!-- Sostituisci 'percorso/immagine.jpg' con il file di default o lascialo vuoto se gestito via JS -->
+                    <img id="scene-img" src="img/bdi_intro.jpg" alt="Illustrazione Scena" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+                </div>
+
+                <p id="scene-text" class="story-text">...</p>
+                
+                <div id="feedback-area" class="feedback-box hidden">
+                    <p id="feedback-text"></p>
+                    <button id="btn-next" class="btn-primary">Avanti >></button>
+                </div>
+
+                <div id="choices-area" class="choices-grid"></div>
+            </main>
+
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

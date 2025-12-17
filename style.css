@@ -1,0 +1,554 @@
+/* =========================================
+   0. TYPOGRAPHY & GLOBAL RESET
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* =========================================
+   1. AMBIENT BACKGROUND (Sfondo Atmosferico)
+   ========================================= */
+.ambient-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    
+    /* Gradient moderno corporate/urbano */
+    background: linear-gradient(135deg, 
+        #1e3c72 0%, 
+        #2a5298 25%,
+        #7e8ba3 50%,
+        #bcc5d3 75%,
+        #e8eef5 100%
+    );
+    
+    /* Effetto sfocato/grain per texture */
+    background-size: 400% 400%;
+    animation: ambientShift 20s ease infinite;
+}
+
+/* Pattern overlay sottile per texture "urbana" */
+.ambient-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.03) 2px,
+            rgba(255, 255, 255, 0.03) 4px
+        );
+    opacity: 0.4;
+}
+
+@keyframes ambientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* =========================================
+   2. GAME WRAPPER (Contenitore Centrale)
+   ========================================= */
+.game-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 30px;
+}
+
+/* =========================================
+   3. ONBOARDING CARD (Box di Benvenuto)
+   ========================================= */
+.onboarding-card {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 50px 40px;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    text-align: center;
+    animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.onboarding-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.onboarding-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e3c72;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+}
+
+.onboarding-card p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #4a5568;
+    margin-bottom: 15px;
+    font-weight: 400;
+}
+
+.onboarding-card p strong {
+    color: #2a5298;
+    font-weight: 600;
+}
+
+.btn-start {
+    margin-top: 30px;
+    background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(30, 60, 114, 0.3);
+    letter-spacing: 0.3px;
+}
+
+.btn-start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(30, 60, 114, 0.4);
+}
+
+.btn-start:active {
+    transform: translateY(0);
+}
+
+/* =========================================
+   4. GAME CONTAINER (Interfaccia di Gioco)
+   ========================================= */
+.game-container {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-container.hidden {
+    display: none;
+}
+
+/* =========================================
+   5. HUD (Heads Up Display)
+   ========================================= */
+.hud {
+    background: rgba(44, 62, 80, 0.95);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.stat-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 48%;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    transition: border-color 0.2s;
+    padding: 8px;
+}
+
+.stat-icon { 
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.stat-info { 
+    width: 100%; 
+}
+
+.stat-info label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.stat-info span {
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.progress-bar {
+    background: rgba(255, 255, 255, 0.15);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) inset;
+}
+
+#bar-capital { 
+    background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+    height: 100%; 
+    transition: width 0.5s ease, background-color 0.3s;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+}
+
+#bar-lucidity { 
+    background: linear-gradient(90deg, #3498db 0%, #5dade2 100%);
+    height: 100%; 
+    transition: width 0.5s ease, background-color 0.3s;
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+.critical { 
+    background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%) !important;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.5) !important;
+}
+
+/* =========================================
+   6. SCENE CARD (Carta Principale)
+   ========================================= */
+.scene-card {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.bias-tag {
+    background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+    color: #2c3e50;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 6px;
+    align-self: flex-start;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(241, 196, 15, 0.3);
+}
+
+#scene-title { 
+    margin: 0 0 25px 0;
+    color: #1e3c72;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+/* =========================================
+   7. SCENE ILLUSTRATION (Spazio Immagini)
+   ========================================= */
+.scene-illustration {
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) inset;
+    position: relative;
+}
+
+/* Pattern decorativo per il placeholder */
+.scene-illustration::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 20px,
+            rgba(0, 0, 0, 0.02) 20px,
+            rgba(0, 0, 0, 0.02) 40px
+        );
+}
+
+.illustration-placeholder {
+    color: #adb5bd;
+    z-index: 1;
+}
+
+.illustration-placeholder svg {
+    opacity: 0.4;
+}
+
+/* Per immagini reali (quando verranno aggiunte) */
+.scene-illustration img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* =========================================
+   8. STORY TEXT (Testo Narrativo)
+   ========================================= */
+.story-text { 
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #495057;
+    flex-grow: 1;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+/* =========================================
+   9. CHOICES & INTERACTION
+   ========================================= */
+.choices-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: auto;
+}
+
+.btn-choice {
+    background: #ffffff;
+    border: 2px solid #dee2e6;
+    padding: 18px 20px;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #2c3e50;
+    font-weight: 500;
+    line-height: 1.5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-choice:hover {
+    border-color: #3498db;
+    background: linear-gradient(135deg, #f0f8ff 0%, #e3f2fd 100%);
+    transform: translateX(8px);
+    box-shadow: 0 4px 16px rgba(52, 152, 219, 0.2);
+}
+
+.btn-choice:active {
+    transform: translateX(4px);
+}
+
+/* =========================================
+   10. FEEDBACK / OUTCOME
+   ========================================= */
+.feedback-box {
+    background: linear-gradient(135deg, #e8f6f3 0%, #d5f4e6 100%);
+    border-left: 5px solid #1abc9c;
+    padding: 20px;
+    margin-top: 25px;
+    border-radius: 8px;
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(26, 188, 156, 0.15);
+}
+
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(15px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.hidden { 
+    display: none; 
+}
+
+#feedback-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 10px;
+    float: right;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(44, 62, 80, 0.4);
+}
+
+/* =========================================
+   11. SHAKE ANIMATION
+   ========================================= */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+
+.shake-damage {
+    animation: shake 0.4s ease-in-out;
+    border-color: #e74c3c !important;
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+}
+
+/* =========================================
+   12. FULL SCREEN FLASH OVERLAYS
+   ========================================= */
+.flash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+}
+
+@keyframes flash-red-anim {
+    0% { 
+        background-color: rgba(231, 76, 60, 0.7); 
+        opacity: 1; 
+    }
+    100% { 
+        background-color: rgba(231, 76, 60, 0); 
+        opacity: 0; 
+    }
+}
+
+@keyframes flash-green-anim {
+    0% { 
+        background-color: rgba(46, 204, 113, 0.6); 
+        opacity: 1; 
+    }
+    100% { 
+        background-color: rgba(46, 204, 113, 0); 
+        opacity: 0; 
+    }
+}
+
+.flash-damage-active {
+    animation: flash-red-anim 1.5s ease-out forwards;
+}
+
+.flash-gain-active {
+    animation: flash-green-anim 1.5s ease-out forwards;
+}
+
+/* =========================================
+   13. RESPONSIVE DESIGN
+   ========================================= */
+@media (max-width: 768px) {
+    .game-wrapper {
+        padding: 20px 15px;
+    }
+    
+    .onboarding-card {
+        padding: 40px 30px;
+    }
+    
+    .onboarding-card h2 {
+        font-size: 1.6rem;
+    }
+    
+    .scene-card {
+        padding: 30px 20px;
+    }
+    
+    #scene-title {
+        font-size: 1.5rem;
+    }
+    
+    .story-text {
+        font-size: 1.05rem;
+    }
+    
+    .hud {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .stat-box {
+        width: 100%;
+    }
+}
